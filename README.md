@@ -15,7 +15,7 @@ Grab the latest release from Releases area, and copy `wget.prg` somewhere onto y
 
 Take a moment to bask as you realize you may not need to ever do this SDCard dance again, or at least not every time you want to copy files to it.
 
-Put'er back in, and when you boot up the CX16, choose a URI you'd like to download, and the output file name to save.
+Put the SDCard back in, and when you boot up the CX16, choose a URI you'd like to download, and the output file name to save.
 
 If you put CX16 wget in your SDCard's root directory, in BASIC you'd write:
 
@@ -41,7 +41,7 @@ You'll see output similar to this, letting you know the usage of the program:
 ```
 ======================================
 CX16 wget                      v2.0.0
-                 codeberg.org/safiire
+                   github.com/safiire
 ======================================
 Usage: run:rem <uri> [@:]<output file>
 ```
@@ -76,6 +76,8 @@ Now the file should appear on your SDCard, for example if you push F7 You'll see
 
 One limitation currently is that this supports only files up to 2GiB, and if you attempt to download a larger file, it will abort and let you know.
 
+Since spaces are used to group the commandline arguments, if your URI has spaces in it, please replace spaces with %20.
+
 # Roadmap
 - [ ] Detect your current baud rate, and temporarily change it to 921600 baud (2.1.0)
 - [ ] For those with multiple UARTs, allow you to specify a UART other than the first found (2.2.0)
@@ -86,9 +88,7 @@ I welcome any contributions to improve CX16 Wget, improve the speed or usability
 
 # License
 
-To be real for a moment, I have released this with the hope that it will help the CX16 community, copy it, learn from it, add it to your own programs in part or in full, whatever.
-
-I would please like a bit of attribution if much of the code is used, like demoscene rules, I would be quite thankful for this, but otherwise go to town, and consult the actual `LICENSE` file. I don't want this source code to be used to train an LLM or AI, however it seems it's currently release it and get absorbed because LLM corpos don't care about copywrite AT ALL, or don't release it at all.  I've chosen to release under AGPL3 anyways.
+This software is released under the GPL3 license
 
 # Contact
 
