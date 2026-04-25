@@ -138,11 +138,11 @@
   ;===============================================================
   .proc show_banner
                 lda   #Version::Major
-                sta   str + 14 + 21
+                sta   str + 35
                 lda   #Version::Minor
-                sta   str + 16 + 21
+                sta   str + 37
                 lda   #Version::Patch
-                sta   str + 18 + 21
+                sta   str + 39
 
                 println "======================================"
     str:        println "CX16 wget                      vX.X.X "
