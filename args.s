@@ -12,15 +12,12 @@
 .include        "kernal_api.inc"
 .include        "macros.inc"
 .include        "enums.inc"
+.include        "structs.inc"
 
 .segment        "BSS"
 
-  ; TODO at this point maybe this should be a struct
   .align 256
-  argv_data:    .res 256
-  argc:         .res 1
-  argv:         .res Config::max_args
-  arg_area_size = * - argv_data
+  args:          .tag Args
 
 .segment        "RODATA"
 
@@ -34,7 +31,10 @@
   ;   Initialize argument area to zero
   ;===============================================================
   .proc zero_arg_area
-                fill_memory argv_data, arg_area_size, $00
+                size      = .sizeof(Args)
+                argv_data = args + Args::argv_data
+
+                fill_memory argv_data, size, $00
                 rts
   .endproc
 
@@ -61,7 +61,10 @@
   ;   Returns: argc in A
   ;===============================================================
   .proc initialize_args
-                comment = Address::basic_buffer + 3
+                argc      = args + Args::argc
+                argv_data = args + Args::argv_data
+                comment   = Address::basic_buffer + 3
+
                 jsr   zero_arg_area
                 jsr   any_args
                 bcc   return
@@ -96,6 +99,9 @@
   ;   Returns: C if we hit Config::max_args
   ;===============================================================
   .proc advance_argc
+                argc = args + Args::argc
+                argv = args + Args::argv
+
                 lda   argc
                 cmp   #Config::max_args
                 bcc   less
@@ -116,6 +122,9 @@
   ; Return the address argv[y] in a:x
   ;===============================================================
   .proc get_arg
+                argv      = args + Args::argv
+                argv_data = args + Args::argv_data
+
                 lda   argv, y
                 ldx   #>argv_data
                 rts
@@ -126,6 +135,8 @@
   ; Return argc in a
   ;===============================================================
   .proc get_argc
+                argc = args + Args::argc
+
                 lda   argc
                 rts
   .endproc

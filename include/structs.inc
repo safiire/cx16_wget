@@ -21,6 +21,15 @@ _STRUCTS_INC = 1
   .endstruct
 
   ;===============================================================
+  ; Argument structure
+  ;===============================================================
+  .struct Args
+    argv_data     .res 256
+    argc          .res 1
+    argv          .res Config::max_args
+  .endstruct
+
+  ;===============================================================
   ; Hold the last CMDR-DOS status message
   ;===============================================================
   .struct DOSStatus

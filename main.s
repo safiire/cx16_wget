@@ -146,7 +146,7 @@
 
                 println "======================================"
     str:        println "CX16 wget                      vX.X.X "
-                println "                 codeberg.org/safiire "
+                println "                   github.com/safiire "
                 println "======================================"
                 rts
   .endproc
