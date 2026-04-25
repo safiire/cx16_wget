@@ -243,13 +243,12 @@
   ;===============================================================
   .proc initiate_fetch
                 status   = response + Response::status
-                filesize = response + Response::filesize
 
                 fill_memory response, .sizeof(Response), $00
 
                 ldy   #0
                 jsr   get_arg
-                ldy   #filesize
+                ldy   #response
                 jsr   issue_atg
 
                 lda   status
@@ -264,7 +263,7 @@
                 sec
                 rts
     overflow:   println "[-] Max download size is 2 GiB"
-                jsr uart_send_control_c
+                jsr   uart_send_control_c
                 sec
                 rts
 
