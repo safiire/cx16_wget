@@ -39,6 +39,7 @@
   expansion_io: .lobytes $9F60, $9F80, $9FA0, $9FC0, $9FE0, $0000
 
 .segment        "CODE"
+
   ;===============================================================
   ; void *detect_uart(void)
   ;   Check each expansion IO port for a UART, save it to globals: uart,
@@ -61,20 +62,12 @@
                 beq   return                     ; return if expansion_io[y] == null
 
                 sta   uart                       ; uart = $9f00 + expansion_io[y]
-                tya
-                tax                              ; x = y
+                jsr   detect_ier_register
+                bcc   next
+                jsr   detect_mcr_register
+                bcs   found                      ; found if detected IER and MCR
 
-                lda   #42
-                ldy   #UART::SCR
-                sta   (uart), y                  ; uart.SCR = 42
-                lda   #0
-                lda   (uart), y
-                cmp   #42
-                beq   found                      ; found if uart.SCR == 42
-
-                txa
-                tay                              ; y = x
-                iny
+    next:       iny
                 bra   body                       ; y++ and loop
 
     found:      clc
@@ -96,17 +89,55 @@
   .endproc
 
   ;===============================================================
+  ; c:bool detect_ier_register()
+  ;   The high nybble of IER is always clear
+  ;===============================================================
+  .proc detect_ier_register
+                phx
+                phy
+                uart_set UART::IER, $FF
+                uart_get UART::IER
+                cmp   #$0F
+                clc
+                bne   no
+                sec
+    no:         uart_set UART::IER, $00          ; disable interrupts again
+                ply
+                plx
+                rts
+  .endproc
+
+  ;===============================================================
+  ; c:bool detect_mcr_register()
+  ;   Bits 7 and 6 of MCR are always clear
+  ;===============================================================
+  .proc detect_mcr_register
+                phx
+                phy
+                uart_set UART::MCR, $FF
+                uart_get UART::MCR
+                cmp   #$3F
+                clc
+                bne   no
+                sec
+    no:         uart_set UART::MCR, $00          ; Just zero it
+                ply
+                plx
+                rts
+  .endproc
+
+  ;===============================================================
   ; void uart_initialize(void)
   ;   921600 baud, 8,N,1, AutoFlow Control, FIFOS, no interrupts
   ;===============================================================
   .proc uart_initialize
-                uart_set   UART::IER, $00        ; No Interrupts
-                uart_set   UART::LCR, $80        ; Set DLAB
-                uart_set   UART::DLM, $00        ;
-                uart_set   UART::DLL, $01        ; $0001 = 921600
-                uart_set   UART::LCR, $03        ; 8,N,1
-                uart_set   UART::FCR, $C7        ; FIFO enable & reset
-                uart_set   UART::MCR, $23        ; DTR/RTS & AutoFlow Control
+                uart_set UART::IER, $00          ; No Interrupts
+                uart_set UART::LCR, $80          ; Set DLAB
+                uart_set UART::DLM, $00          ;
+                uart_set UART::DLL, $01          ; $0001 = 921600
+                uart_set UART::LCR, $03          ; 8,N,1
+                uart_set UART::FCR, $C7          ; FIFO enable & reset
+                uart_set UART::MCR, $23          ; DTR/RTS & AutoFlow Control
 
                 jsr   discard_banner
                 rts
