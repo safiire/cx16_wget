@@ -79,6 +79,7 @@ One limitation currently is that this supports only files up to 2GiB, and if you
 Since spaces are used to group the commandline arguments, if your URI has spaces in it, please replace spaces with %20.
 
 # Roadmap
+- [ ] Better UART and ZiModem port detection
 - [ ] Detect your current baud rate, and temporarily change it to 921600 baud (2.1.0)
 - [ ] For those with multiple UARTs, allow you to specify a UART other than the first found (2.2.0)
 
