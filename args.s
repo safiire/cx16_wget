@@ -31,7 +31,7 @@
   ;   Initialize argument area to zero
   ;===============================================================
   .proc zero_arg_area
-                size      = .sizeof(Args)
+                size = .sizeof(Args)
 
                 fill_memory args, size, $00
                 rts
