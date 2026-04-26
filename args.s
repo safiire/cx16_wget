@@ -32,9 +32,8 @@
   ;===============================================================
   .proc zero_arg_area
                 size      = .sizeof(Args)
-                argv_data = args + Args::argv_data
 
-                fill_memory argv_data, size, $00
+                fill_memory args, size, $00
                 rts
   .endproc
 
