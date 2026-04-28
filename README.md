@@ -80,6 +80,7 @@ Since spaces are used to group the commandline arguments, if your URI has spaces
 
 # Roadmap
 - [ ] Better UART and ZiModem port detection
+- [ ] Stop using himem, there's no need
 - [ ] Detect your current baud rate, and temporarily change it to 921600 baud (2.1.0)
 - [ ] For those with multiple UARTs, allow you to specify a UART other than the first found (2.2.0)
 
